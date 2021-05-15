@@ -24,7 +24,7 @@ public class Account {
     }
 
 
-    public void savaAccount(Account account){
+    public void savaAccount(){
         String str = "表名";
         String sql = "INSERT INTO ? VALUES(?, ?, ?)";
         Connection connection = JDBC.LinkConnection();
@@ -33,9 +33,9 @@ public class Account {
             try {
                 pstmt = connection.prepareStatement(sql);
                 pstmt.setString(1, str);
-                pstmt.setString(2, account.username);
-                pstmt.setString(3, account.password);
-                pstmt.setString(4, account.type);
+                pstmt.setString(2, this.username);
+                pstmt.setString(3, this.password);
+                pstmt.setString(4, this.type);
                 pstmt.executeUpdate();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
@@ -45,7 +45,7 @@ public class Account {
         }
     }
 
-    public void deleteAccount(Account account){
+    public void deleteAccount(){
         String str = "表名";
         String sql = "DELETE FROM ? WHERE username=?";
         Connection connection = JDBC.LinkConnection();
@@ -54,7 +54,7 @@ public class Account {
             try {
                 pstmt = connection.prepareStatement(sql);
                 pstmt.setString(1, str);
-                pstmt.setString(2, account.username);
+                pstmt.setString(2, this.username);
                 pstmt.executeUpdate();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
@@ -64,7 +64,7 @@ public class Account {
         }
     }
 
-    public static void updateAccount(Account newAccount){
+    public void updateAccount(){
         String str = "表名";
         String sql = "UPDATE ? SET password=?, type=? WHERE username=?";
         Connection connection = JDBC.LinkConnection();
@@ -73,8 +73,8 @@ public class Account {
             try {
                 pstmt = connection.prepareStatement(sql);
                 pstmt.setString(1, str);
-                pstmt.setString(2, newAccount.password);
-                pstmt.setString(3, newAccount.type);
+                pstmt.setString(2, this.password);
+                pstmt.setString(3, this.type);
                 pstmt.executeUpdate();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();

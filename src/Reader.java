@@ -38,7 +38,7 @@ public class Reader {
 
     }
 
-    public static void savaReader(Reader reader){
+    public void savaReader(){
         String str = "表名";
         String sql = "INSERT INTO ? VALUES(?, ?, ?, ?, ?, ?)";
         Connection connection = JDBC.LinkConnection();
@@ -48,11 +48,11 @@ public class Reader {
                 pstmt = connection.prepareStatement(sql);
                 pstmt.setString(1, str);
                 pstmt.setInt(2, (int) Math.random()*1000);
-                pstmt.setString(3, reader.readerID);
-                pstmt.setString(4, reader.readerName);
-                pstmt.setString(5, reader.address);
-                pstmt.setString(6, reader.phone);
-                pstmt.setString(7, reader.email);
+                pstmt.setString(3, this.readerID);
+                pstmt.setString(4, this.readerName);
+                pstmt.setString(5, this.address);
+                pstmt.setString(6, this.phone);
+                pstmt.setString(7, this.email);
                 pstmt.executeUpdate();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
@@ -62,7 +62,7 @@ public class Reader {
         }
     }
 
-    public static void deleteReader(Reader reader){
+    public void deleteReader(){
         String str = "表名";
         String sql = "DELETE FROM ? WHERE rederid=?";
         Connection connection = JDBC.LinkConnection();
@@ -71,7 +71,7 @@ public class Reader {
             try {
                 pstmt = connection.prepareStatement(sql);
                 pstmt.setString(1, str);
-                pstmt.setString(2, reader.readerID);
+                pstmt.setString(2, this.readerID);
                 pstmt.executeUpdate();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
@@ -81,7 +81,7 @@ public class Reader {
         }
     }
 
-    public static void updateReader(Reader newReader){
+    public void updateReader(){
         String str = "表名";
         String sql = "UPDATE ? SET readername=?, address=?, phone=?, email=? WHERE readerid=?";
         Connection connection = JDBC.LinkConnection();
@@ -90,11 +90,11 @@ public class Reader {
             try {
                 pstmt = connection.prepareStatement(sql);
                 pstmt.setString(1, str);
-                pstmt.setString(2, newReader.readerName);
-                pstmt.setString(3, newReader.address);
-                pstmt.setString(4, newReader.phone);
-                pstmt.setString(5, newReader.email);
-                pstmt.setString(6, newReader.readerID);
+                pstmt.setString(2, this.readerName);
+                pstmt.setString(3, this.address);
+                pstmt.setString(4, this.phone);
+                pstmt.setString(5, this.email);
+                pstmt.setString(6, this.readerID);
                 pstmt.executeUpdate();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();

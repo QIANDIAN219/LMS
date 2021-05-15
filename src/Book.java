@@ -43,7 +43,7 @@ public class Book {
         this.status = status;
     }
 
-    public void savaBook(Book book){
+    public void savaBook(){
         String str = "表名";
         String sql = "INSERT INTO ? VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Connection connection = JDBC.LinkConnection();
@@ -53,13 +53,13 @@ public class Book {
                 pstmt = connection.prepareStatement(sql);
                 pstmt.setString(1, str);
                 pstmt.setInt(2, (int) Math.random()*1000);
-                pstmt.setString(3, book.bookId);
-                pstmt.setString(4, book.bookName);
-                pstmt.setString(5, book.author);
-                pstmt.setString(6, book.publisher);
-                pstmt.setDouble(7, book.price);
-                pstmt.setString(8, book.abstracts);
-                pstmt.setString(9, book.status);
+                pstmt.setString(3, this.bookId);
+                pstmt.setString(4, this.bookName);
+                pstmt.setString(5, this.author);
+                pstmt.setString(6, this.publisher);
+                pstmt.setDouble(7, this.price);
+                pstmt.setString(8, this.abstracts);
+                pstmt.setString(9, this.status);
                 pstmt.executeUpdate();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
@@ -69,7 +69,7 @@ public class Book {
         }
     }
 
-    public void deleteBook(Book book){
+    public void deleteBook(){
         String str = "表名";
         String sql = "DELETE FROM ? WHERE bookid=?";
         Connection connection = JDBC.LinkConnection();
@@ -78,7 +78,7 @@ public class Book {
             try {
                 pstmt = connection.prepareStatement(sql);
                 pstmt.setString(1, str);
-                pstmt.setString(2, book.bookId);
+                pstmt.setString(2, this.bookId);
                 pstmt.executeUpdate();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
@@ -88,7 +88,7 @@ public class Book {
         }
     }
 
-    public void updateBook(Book newBook){
+    public void updateBook(){
         String str = "表名";
         String sql = "UPDATE ? SET bookName=?, author=?, publisher=?, price=?, abstracts=?, catelog=?, status=? WHERE bookid=?";
         Connection connection = JDBC.LinkConnection();
@@ -97,14 +97,14 @@ public class Book {
             try {
                 pstmt = connection.prepareStatement(sql);
                 pstmt.setString(1, str);
-                pstmt.setString(2, newBook.bookName);
-                pstmt.setString(3, newBook.author);
-                pstmt.setString(4, newBook.publisher);
-                pstmt.setDouble(5, newBook.price);
-                pstmt.setString(6, newBook.abstracts);
-                pstmt.setString(7, newBook.catelog);
-                pstmt.setString(8, newBook.status);
-                pstmt.setString(8, newBook.bookId);
+                pstmt.setString(2, this.bookName);
+                pstmt.setString(3, this.author);
+                pstmt.setString(4, this.publisher);
+                pstmt.setDouble(5, this.price);
+                pstmt.setString(6, this.abstracts);
+                pstmt.setString(7, this.catelog);
+                pstmt.setString(8, this.status);
+                pstmt.setString(8, this.bookId);
                 pstmt.executeUpdate();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();

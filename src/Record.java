@@ -30,7 +30,7 @@ public class Record {
         }
     }
 
-    private static void savaRecord(Record record){
+    private void savaRecord(){
         String str = "表名";
         String sql = "INSERT INTO ? VALUES(?, ?, ?, ?)";
         Connection connection = JDBC.LinkConnection();
@@ -40,9 +40,9 @@ public class Record {
                 pstmt = connection.prepareStatement(sql);
                 pstmt.setString(1, str);
                 pstmt.setInt(2, (int) Math.random()*1000);
-                pstmt.setString(3, record.bookID);
-                pstmt.setString(4, record.readerID);
-                pstmt.setDate(5, (java.sql.Date) record.borrowDate);
+                pstmt.setString(3, this.bookID);
+                pstmt.setString(4, this.readerID);
+                pstmt.setDate(5, (java.sql.Date) this.borrowDate);
                 pstmt.executeUpdate();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
@@ -52,7 +52,7 @@ public class Record {
         }
     }
 
-    private static void deleteRecord(Record record){
+    private void deleteRecord(){
         String str = "表名";
         String sql = "DELETE FROM ? WHERE bookid=? AND readid=?";
         Connection connection = JDBC.LinkConnection();
@@ -61,8 +61,8 @@ public class Record {
             try {
                 pstmt = connection.prepareStatement(sql);
                 pstmt.setString(1, str);
-                pstmt.setString(2, record.bookID);
-                pstmt.setString(3, record.readerID);
+                pstmt.setString(2, this.bookID);
+                pstmt.setString(3, this.readerID);
                 pstmt.executeUpdate();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
@@ -132,13 +132,13 @@ public class Record {
     public static void borrowBook(Book book, Reader reader){
         Date date = new Date();
         Record record = new Record(book.getBookId(), reader.getReaderID(), date);
-        savaRecord(record);
+        record.savaRecord();
     }
 
     public static void returnBook(Book book){
         Record record = new Record(book.getBookId(), null, null);
         if(!isExpired(record)){
-            deleteRecord(record);
+            record.deleteRecord();
         }
     }
 }
