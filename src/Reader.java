@@ -35,7 +35,6 @@ public class Reader {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-
     }
 
     public void savaReader(){

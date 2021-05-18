@@ -7,6 +7,8 @@ import java.util.List;
 
 public class test {
     public static void main(String[] args) {
+        new BorrowBook();
+        /*
         String sql = "SELECT * FROM ? WHERE";
         Book bookCondition = new Book("001", "三体", "刘慈欣", "北京大学出版社", 40.0, null, "科幻", "借出");
         String[] str = new String[6];
@@ -47,5 +49,6 @@ public class test {
         System.out.println((a + b) * h * 1 / 2);
         System.out.println(h / 2 * (a + b));
         System.out.println(a-- + " " + b++);
+        */
     }
 }

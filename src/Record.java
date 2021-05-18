@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Record {
+    private String recordID;
     private String bookID;
     private String readerID;
     private Date borrowDate;

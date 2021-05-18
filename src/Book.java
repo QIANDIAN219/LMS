@@ -15,8 +15,8 @@ public class Book {
     private String status;
 
     Book(){
-
     }
+
     Book(ResultSet rs) {
         try {
             this.bookId = rs.getString("bookid");
