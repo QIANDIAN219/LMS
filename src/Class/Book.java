@@ -1,3 +1,5 @@
+package Class;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,7 +16,7 @@ public class Book {
     private String catelog;
     private String status;
 
-    Book(){
+    public Book(){
     }
 
     Book(ResultSet rs) {
@@ -32,7 +34,18 @@ public class Book {
         }
     }
 
-    Book(String bookId, String bookName, String author, String publisher, double price, String abstracts, String catelog, String status) {
+    public Book(String bookId){
+        this.bookId = bookId;
+        this.bookName = null;
+        this.author = null;
+        this.publisher = null;
+        this.price = 0;
+        this.abstracts = null;
+        this.catelog = null;
+        this.status = null;
+    }
+
+    public Book(String bookId, String bookName, String author, String publisher, double price, String abstracts, String catelog, String status) {
         this.bookId = bookId;
         this.bookName = bookName;
         this.author = author;
@@ -42,6 +55,7 @@ public class Book {
         this.catelog = catelog;
         this.status = status;
     }
+
 
     public void savaBook(){
         String str = "表名";
@@ -114,7 +128,7 @@ public class Book {
         }
     }
 
-    public List<Book> getBooks(Book bookCondition){
+    public static List<Book> getBooks(Book bookCondition){
         List<Book> list = new ArrayList<>();
         String sql = "SELECT * FROM Book WHERE";
         String[] str = new String[6];

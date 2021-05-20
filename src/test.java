@@ -1,16 +1,30 @@
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import Class.Book;
+import Frame.AddBook;
+import Frame.ShowBook;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class test {
     public static void main(String[] args) {
-        new BorrowBook();
+        //new BorrowBook();
+        //new ReturnBook();
+        new AddBook();
+       // new CheckConditionBook();
+        //new UpdateBook();
+
+        Book bookCondition1 = new Book("001", "三体", "刘慈欣", "北京大学出版社", 40.0, null, "科幻", "借出");
+        Book bookCondition2 = new Book("002", "三体", "刘慈欣", "北京大学出版社", 40.0, null, "科幻", "借出");
+        List<Book> list = new ArrayList();
+        list.add(bookCondition1);
+        list.add(bookCondition2);
+        System.out.println(list.size());
+        Book book = list.get(1);
+        System.out.println(book.getBookId());
+        new ShowBook(list);
         /*
         String sql = "SELECT * FROM ? WHERE";
-        Book bookCondition = new Book("001", "三体", "刘慈欣", "北京大学出版社", 40.0, null, "科幻", "借出");
+        Class.Book bookCondition = new Class.Book("001", "三体", "刘慈欣", "北京大学出版社", 40.0, null, "科幻", "借出");
         String[] str = new String[6];
         int k = 0;
         if(bookCondition.getBookId() != null) {

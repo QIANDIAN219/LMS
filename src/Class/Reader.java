@@ -1,4 +1,5 @@
-import java.lang.reflect.Array;
+package Class;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,12 +18,20 @@ public class Reader {
 
     }
 
-    Reader(String readerID, String readerName, String address, String phone, String email) {
+    public Reader(String readerID, String readerName, String address, String phone, String email) {
         this.readerID = readerID;
         this.readerName = readerName;
         this.address = address;
         this.phone = phone;
         this.email = email;
+    }
+
+    public Reader(String readerID) {
+        this.readerID = readerID;
+        this.readerName = null;
+        this.address = null;
+        this.phone = null;
+        this.email = null;
     }
 
     Reader(ResultSet rs) {

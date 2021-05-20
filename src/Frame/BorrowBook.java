@@ -1,5 +1,10 @@
-import java.awt.*;
+package Frame;
+
+import Class.*;
+
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 /*
  * Created by JFormDesigner on Tue May 18 10:27:20 CST 2021
  */
@@ -17,19 +22,35 @@ public class BorrowBook extends JFrame {
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - unknown
-        scrollPane = new JScrollPane();
         textField1 = new JTextField();
         textField2 = new JTextField();
+        label1 = new JLabel("图书证编号");
+        label2 = new JLabel("图书编号");
+        button1 = new JButton("借书");
 
         //======== this ========
         Container contentPane = getContentPane();
         contentPane.setLayout(null);
 
-
+        contentPane.add(label1);
+        label1.setBounds(new Rectangle(new Point(30, 90), label1.getPreferredSize()));
+        contentPane.add(label2);
+        label2.setBounds(new Rectangle(new Point(40, 130), label2.getPreferredSize()));
         contentPane.add(textField1);
-        textField1.setBounds(100, 100, 90, 20);
+        textField1.setBounds(100, 90, 90, textField1.getPreferredSize().height);
         contentPane.add(textField2);
-        textField2.setBounds(100, 130, 90, 20);
+        textField2.setBounds(100, 130, 90, textField2.getPreferredSize().height);
+        contentPane.add(button1);
+        button1.setBounds(115, 160, 60, 20);
+        button1.addActionListener(
+                new AbstractAction() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        Reader reader = new Reader(textField1.getText());
+                        Book book = new Book(textField2.getText());
+                    }
+                }
+        );
         {
             // compute preferred size
             Dimension preferredSize = new Dimension();
@@ -57,5 +78,7 @@ public class BorrowBook extends JFrame {
     // JFormDesigner - End of variables declaration  //GEN-END:variables
     private JTextField textField1;
     private JTextField textField2;
-    private JScrollPane scrollPane;
+    private JLabel label1;
+    private JLabel label2;
+    private JButton button1;
 }
