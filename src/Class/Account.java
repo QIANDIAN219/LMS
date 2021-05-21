@@ -28,16 +28,17 @@ public class Account {
 
     public void savaAccount(){
         String str = "表名";
-        String sql = "INSERT INTO ? VALUES(?, ?, ?)";
+        String sql = "INSERT INTO ? VALUES(?, ?, ?, ?)";
         Connection connection = JDBC.LinkConnection();
         PreparedStatement pstmt = null;
         if(connection != null){
             try {
                 pstmt = connection.prepareStatement(sql);
                 pstmt.setString(1, str);
-                pstmt.setString(2, this.username);
-                pstmt.setString(3, this.password);
-                pstmt.setString(4, this.type);
+                pstmt.setInt(2, (int) Math.random()*1000);
+                pstmt.setString(3, this.username);
+                pstmt.setString(4, this.password);
+                pstmt.setString(5, this.type);
                 pstmt.executeUpdate();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
@@ -77,6 +78,7 @@ public class Account {
                 pstmt.setString(1, str);
                 pstmt.setString(2, this.password);
                 pstmt.setString(3, this.type);
+                pstmt.setString(4, this.username);
                 pstmt.executeUpdate();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();

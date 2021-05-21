@@ -48,6 +48,7 @@ public class BorrowBook extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         Reader reader = new Reader(textField1.getText());
                         Book book = new Book(textField2.getText());
+                        Record.borrowBook(book, reader);
                     }
                 }
         );

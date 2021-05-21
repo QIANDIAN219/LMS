@@ -58,7 +58,8 @@ public class CheckConditionBook extends JFrame {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         Book book = new Book(textField1.getText(), textField2.getText(), textField3.getText(), textField4.getText(), 0, null, textField5.getText(), null);
-                        new UpdateBook(book);
+                        List<Book> list = Book.getBooks(book);
+                        new ShowBook(list);
                     }
                 }
         );
