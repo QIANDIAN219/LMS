@@ -1,6 +1,6 @@
 import Class.Book;
-import Frame.AddBook;
 import Frame.ShowBook;
+import Frame.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +9,8 @@ public class test {
     public static void main(String[] args) {
         //new BorrowBook();
         //new ReturnBook();
-        new AddBook();
-       // new CheckConditionBook();
+        //new AddBook();
+        new CheckConditionBook();
         //new UpdateBook();
 
         Book bookCondition1 = new Book("001", "三体", "刘慈欣", "北京大学出版社", 40.0, null, "科幻", "借出");
