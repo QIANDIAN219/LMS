@@ -56,7 +56,7 @@ public class Record {
 
     private void deleteRecord(){
         String str = "表名";
-        String sql = "DELETE FROM ? WHERE bookid=? AND readid=?";
+        String sql = "DELETE FROM ? WHERE bookid=?";
         Connection connection = JDBC.LinkConnection();
         PreparedStatement pstmt = null;
         if(connection != null){
@@ -64,7 +64,6 @@ public class Record {
                 pstmt = connection.prepareStatement(sql);
                 pstmt.setString(1, str);
                 pstmt.setString(2, this.bookID);
-                pstmt.setString(3, this.readerID);
                 pstmt.executeUpdate();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
@@ -126,7 +125,6 @@ public class Record {
     }
 
     private static boolean isExpired(Record record){
-        Date now = new Date();
         boolean flag = false;
         return flag;
     }
@@ -138,7 +136,7 @@ public class Record {
     }
 
     public static void returnBook(Book book){
-        Record record = new Record(book.getBookId(), null, null);
+        Record record = new Record(book.getBookId(), null, new Date());
         if(!isExpired(record)){
             record.deleteRecord();
         }

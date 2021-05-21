@@ -78,6 +78,7 @@ public class UpdateBook extends JFrame {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         Book book = new Book(textField1.getText(),textField2.getText(), textField3.getText(), textField4.getText(), Double.parseDouble(textField5.getText()), textField6.getText(), textField7.getText(), "在库");
+                        book.updateBook();
                     }
                 }
         );

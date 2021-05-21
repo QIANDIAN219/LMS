@@ -4,6 +4,7 @@ import Class.Book;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import Class.*;
 
 public class ReturnBook extends JFrame {
     public ReturnBook() {
@@ -32,6 +33,7 @@ public class ReturnBook extends JFrame {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         Book book = new Book(textField1.getText());
+                        Record.returnBook(book);
                     }
                 }
         );
