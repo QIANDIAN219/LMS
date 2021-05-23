@@ -34,7 +34,7 @@ public class Reader {
         this.email = null;
     }
 
-    Reader(ResultSet rs) {
+    public Reader(ResultSet rs) {
         try {
             this.readerID = rs.getString("readerid");
             this.readerName = rs.getString("readerName");

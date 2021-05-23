@@ -5,6 +5,7 @@ import Class.Book;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 
 public class UpdateBook extends JFrame {
     public UpdateBook(Book book){
@@ -14,13 +15,13 @@ public class UpdateBook extends JFrame {
     private void initComponents(Book book) {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - unknown
-        textField1 = new JTextField();
-        textField2 = new JTextField();
-        textField3 = new JTextField();
-        textField4 = new JTextField();
-        textField5 = new JTextField();
-        textField6 = new JTextField();
-        textField7 = new JTextField();
+        textField1 = new JTextField(book.getBookId());
+        textField2 = new JTextField(book.getBookName());
+        textField3 = new JTextField(book.getAuthor());
+        textField4 = new JTextField(book.getPublisher());
+        textField5 = new JTextField(String.valueOf(book.getPrice()));
+        textField6 = new JTextField(book.getAbstracts());
+        textField7 = new JTextField(book.getCatelog());
         label1 = new JLabel("图书编号");
         label2 = new JLabel("图书名称");
         label3 = new JLabel("图书作者");
@@ -77,8 +78,18 @@ public class UpdateBook extends JFrame {
                 new AbstractAction() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        Book book = new Book(textField1.getText(),textField2.getText(), textField3.getText(), textField4.getText(), Double.parseDouble(textField5.getText()), textField6.getText(), textField7.getText(), "在库");
-                        book.updateBook();
+                        book.setBookId(textField1.getText());
+                        book.setBookName(textField2.getText());
+                        book.setAuthor(textField3.getText());
+                        book.setPublisher(textField4.getText());
+                        book.setPrice(Double.parseDouble(textField5.getText()));
+                        book.setAbstracts(textField6.getText());
+                        book.setCatelog(textField7.getText());
+                        try {
+                            book.updateBook();
+                        } catch (SQLException throwables) {
+                            JOptionPane.showMessageDialog(null, "网络连接超时", "错误", JOptionPane.ERROR_MESSAGE);
+                        }
                     }
                 }
         );
@@ -100,7 +111,7 @@ public class UpdateBook extends JFrame {
         pack();
         setLocationRelativeTo(getOwner());
         setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 

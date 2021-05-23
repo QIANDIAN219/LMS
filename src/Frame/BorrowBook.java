@@ -1,7 +1,6 @@
 package Frame;
 
 import Class.*;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -46,9 +45,12 @@ public class BorrowBook extends JFrame {
                 new AbstractAction() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+
                         Reader reader = new Reader(textField1.getText());
                         Book book = new Book(textField2.getText());
                         Record.borrowBook(book, reader);
+                        JOptionPane.showMessageDialog(null, "借书成功", "借书", JOptionPane.INFORMATION_MESSAGE);
+                        dispose();
                     }
                 }
         );
@@ -70,7 +72,7 @@ public class BorrowBook extends JFrame {
         pack();
         setLocationRelativeTo(getOwner());
         setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 

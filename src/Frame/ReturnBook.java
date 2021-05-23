@@ -1,10 +1,10 @@
 package Frame;
 import Class.Book;
+import Class.Record;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import Class.*;
 
 public class ReturnBook extends JFrame {
     public ReturnBook() {
@@ -55,7 +55,7 @@ public class ReturnBook extends JFrame {
         pack();
         setLocationRelativeTo(getOwner());
         setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 

@@ -1,10 +1,12 @@
 package Class;
 
+import javax.swing.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Book {
     private String bookId;
@@ -58,21 +60,20 @@ public class Book {
 
 
     public void savaBook(){
-        String str = "表名";
-        String sql = "INSERT INTO ? VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO BOOK VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Connection connection = JDBC.LinkConnection();
         PreparedStatement pstmt = null;
         if(connection != null){
             try {
                 pstmt = connection.prepareStatement(sql);
-                pstmt.setString(1, str);
-                pstmt.setInt(2, (int) Math.random()*1000);
-                pstmt.setString(3, this.bookId);
-                pstmt.setString(4, this.bookName);
-                pstmt.setString(5, this.author);
-                pstmt.setString(6, this.publisher);
-                pstmt.setDouble(7, this.price);
-                pstmt.setString(8, this.abstracts);
+                pstmt.setString(1, String.valueOf((int)(Math.random()*10000)));
+                pstmt.setString(2, this.bookId);
+                pstmt.setString(3, this.bookName);
+                pstmt.setString(4, this.author);
+                pstmt.setString(5, this.publisher);
+                pstmt.setDouble(6, this.price);
+                pstmt.setString(7, this.abstracts);
+                pstmt.setString(8, this.catelog);
                 pstmt.setString(9, this.status);
                 pstmt.executeUpdate();
             } catch (SQLException throwables) {
@@ -84,15 +85,13 @@ public class Book {
     }
 
     public void deleteBook(){
-        String str = "表名";
-        String sql = "DELETE FROM ? WHERE bookid=?";
+        String sql = "DELETE FROM BOOK WHERE bookid=?";
         Connection connection = JDBC.LinkConnection();
         PreparedStatement pstmt = null;
         if(connection != null){
             try {
                 pstmt = connection.prepareStatement(sql);
-                pstmt.setString(1, str);
-                pstmt.setString(2, this.bookId);
+                pstmt.setString(1, this.bookId);
                 pstmt.executeUpdate();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
@@ -102,23 +101,33 @@ public class Book {
         }
     }
 
-    public void updateBook(){
+    public void updateBook() throws SQLException {
+        String sql = "UPDATE BOOK SET bookName=?, author=?, publisher=?, price=?, abstracts=?, catelog=?, status=? WHERE bookid=?";
+        Connection connection = JDBC.LinkConnection();
+        PreparedStatement pstmt = null;
+        pstmt = connection.prepareStatement(sql);
+        pstmt.setString(1, this.bookName);
+        pstmt.setString(2, this.author);
+        pstmt.setString(3, this.publisher);
+        pstmt.setDouble(4, this.price);
+        pstmt.setString(5, this.abstracts);
+        pstmt.setString(6, this.catelog);
+        pstmt.setString(7, this.status);
+        pstmt.setString(8, this.bookId);
+        pstmt.executeUpdate();
+        JOptionPane.showMessageDialog(null, "修改成功", "修改图书信息", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public static void updateStatus(Book book){
         String str = "表名";
-        String sql = "UPDATE ? SET bookName=?, author=?, publisher=?, price=?, abstracts=?, catelog=?, status=? WHERE bookid=?";
+        String sql = "UPDATE ? SET status=? WHERE bookid=?";
         Connection connection = JDBC.LinkConnection();
         PreparedStatement pstmt = null;
         if(connection != null){
             try {
                 pstmt = connection.prepareStatement(sql);
-                pstmt.setString(1, str);
-                pstmt.setString(2, this.bookName);
-                pstmt.setString(3, this.author);
-                pstmt.setString(4, this.publisher);
-                pstmt.setDouble(5, this.price);
-                pstmt.setString(6, this.abstracts);
-                pstmt.setString(7, this.catelog);
-                pstmt.setString(8, this.status);
-                pstmt.setString(8, this.bookId);
+                pstmt.setString(2, book.status);
+                pstmt.setString(3, book.bookId);
                 pstmt.executeUpdate();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
@@ -128,60 +137,71 @@ public class Book {
         }
     }
 
-    public static List<Book> getBooks(Book bookCondition){
+    public static Book getBook(String bookId){
+        Book book = null;
+        String sql = "SELECT * FROM BOOK WHERE bookid=?";
+        Connection connection = JDBC.LinkConnection();
+        PreparedStatement pstmt = null;
+        if(connection != null){
+            try {
+                pstmt = connection.prepareStatement(sql);
+                pstmt.setString(1, bookId);
+                pstmt.execute();
+                ResultSet rs = pstmt.getResultSet();
+                rs.next();
+                book = new Book(rs);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }else{
+            System.out.println("连接失败");
+        }
+        return book;
+    }
+
+    public static List<Book> getBooks(Book bookCondition) throws SQLException {
         List<Book> list = new ArrayList<>();
         String sql = "SELECT * FROM Book WHERE";
         String[] str = new String[6];
         int k = 0;
-        if(bookCondition.bookId != null){
-            sql = sql.concat("bookid=? AND");
-            str[k++] = "bookid";
+        if(bookCondition.bookId.length() !=0){
+            sql = sql.concat(" bookid=? AND");
+            str[k++] = bookCondition.bookId;
         }
-        if(bookCondition.bookName != null){
-            sql = sql.concat("bookname=? AND");
-            str[k++] = "bookname";
+        if(bookCondition.bookName.length() !=0){
+            sql = sql.concat(" bookname=? AND");
+            str[k++] = bookCondition.bookName;
         }
-        if(bookCondition.author != null){
-            sql = sql.concat("author=? AND");
-            str[k++] = "author";
+        if(bookCondition.author.length() !=0){
+            sql = sql.concat(" author=? AND");
+            str[k++] = bookCondition.author;
         }
-        if(bookCondition.publisher != null){
-            sql = sql.concat("publisher=? AND");
-            str[k++] = "publisher";
+        if(bookCondition.publisher.length() !=0){
+            sql = sql.concat(" publisher=? AND");
+            str[k++] = bookCondition.publisher;
         }
-        if(bookCondition.abstracts != null){
-            sql = sql.concat("abstracts=? AND");
-            str[k++] = "abstracts";
-        }
-        if(bookCondition.catelog != null){
-            sql = sql.concat("catelog=?");
-            str[k++] = "catelog";
-        }
-        if(sql.endsWith(" AND")){
-            sql = sql.substring(0, sql.lastIndexOf(" AND"));
-            System.out.println(sql);
+        if(bookCondition.catelog.length() !=0){
+            sql = sql.concat(" catelog=?");
+            str[k++] = bookCondition.catelog;
         }
 
+        if(sql.endsWith(" AND")){
+            sql = sql.substring(0, sql.lastIndexOf(" AND"));
+        }
         Connection connection = JDBC.LinkConnection();
         PreparedStatement pstmt = null;
-        if(connection != null){
-            try {
-                pstmt = connection.prepareStatement(sql);
-                for(int i = 0; i < str.length; i++){
-                    if(str[i] != null){
-                        pstmt.setString(i+1, str[i]);
-                    }
-                }
-                pstmt.execute();
-                ResultSet rs = pstmt.getResultSet();
-                while (rs.next()){
-                    list.add(new Book(rs));
-                }
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+        Book book = null;
+        pstmt = connection.prepareStatement(sql);
+        for(int i = 0; i < str.length; i++){
+            if(str[i] != null){
+                pstmt.setString(i+1, str[i]);
             }
-        }else{
-            System.out.println("连接失败");
+        }
+        pstmt.execute();
+        ResultSet rs = pstmt.getResultSet();
+        while (rs.next()){
+            book = new Book(rs);
+            list.add(book);
         }
         return list;
     }

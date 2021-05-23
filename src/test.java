@@ -1,7 +1,8 @@
 import Class.Book;
-import Frame.ShowBook;
-import Frame.*;
+import Class.JDBC;
+import Frame.Main;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,18 +11,16 @@ public class test {
         //new BorrowBook();
         //new ReturnBook();
         //new AddBook();
-        new CheckConditionBook();
+        //new CheckConditionBook();
         //new UpdateBook();
+        new Main();
 
         Book bookCondition1 = new Book("001", "三体", "刘慈欣", "北京大学出版社", 40.0, null, "科幻", "借出");
         Book bookCondition2 = new Book("002", "三体", "刘慈欣", "北京大学出版社", 40.0, null, "科幻", "借出");
         List<Book> list = new ArrayList();
         list.add(bookCondition1);
         list.add(bookCondition2);
-        System.out.println(list.size());
-        Book book = list.get(1);
-        System.out.println(book.getBookId());
-        new ShowBook(list);
+        //new ShowBook(list);
         /*
         String sql = "SELECT * FROM ? WHERE";
         Class.Book bookCondition = new Class.Book("001", "三体", "刘慈欣", "北京大学出版社", 40.0, null, "科幻", "借出");
@@ -64,5 +63,7 @@ public class test {
         System.out.println(h / 2 * (a + b));
         System.out.println(a-- + " " + b++);
         */
+        Connection connection = JDBC.LinkConnection();
+        System.out.println(connection);
     }
 }

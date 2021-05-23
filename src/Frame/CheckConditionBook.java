@@ -5,6 +5,7 @@ import Class.Book;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 import java.util.List;
 
 public class CheckConditionBook extends JFrame {
@@ -58,8 +59,13 @@ public class CheckConditionBook extends JFrame {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         Book book = new Book(textField1.getText(), textField2.getText(), textField3.getText(), textField4.getText(), 0, null, textField5.getText(), null);
-                        List<Book> list = Book.getBooks(book);
-                        new ShowBook(list);
+                        List<Book> list = null;
+                        try {
+                            list = Book.getBooks(book);
+                            new ShowBook(list);
+                        } catch (SQLException throwables) {
+                            throwables.printStackTrace();
+                        }
                     }
                 }
         );
@@ -81,7 +87,7 @@ public class CheckConditionBook extends JFrame {
         pack();
         setLocationRelativeTo(getOwner());
         setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 

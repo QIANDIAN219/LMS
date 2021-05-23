@@ -14,13 +14,13 @@ public class AddBook extends JFrame {
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - unknown
-        textField1 = new JTextField();
-        textField2 = new JTextField();
-        textField3 = new JTextField();
-        textField4 = new JTextField();
-        textField5 = new JTextField();
+        textField1 = new JTextField("00001");
+        textField2 = new JTextField("三体");
+        textField3 = new JTextField("刘慈欣");
+        textField4 = new JTextField("北京大学出版社");
+        textField5 = new JTextField(50);
         textField6 = new JTextField();
-        textField7 = new JTextField();
+        textField7 = new JTextField("科幻");
         label1 = new JLabel("图书编号");
         label2 = new JLabel("图书名称");
         label3 = new JLabel("图书作者");
@@ -69,8 +69,10 @@ public class AddBook extends JFrame {
                 new AbstractAction() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        Book book = new Book(textField1.getText(),textField2.getText(), textField3.getText(), textField4.getText(), Double.parseDouble(textField5.getText()), textField6.getText(), textField7.getText(), "在库");
+                        Book book = new Book(textField1.getText(),textField2.getText(), textField3.getText(), textField4.getText(), Double.parseDouble(textField5.getText()), textField6.getText(), textField7.getText(), "1");
                         book.savaBook();
+                        JOptionPane.showMessageDialog(null, "添加成功", "添加", JOptionPane.INFORMATION_MESSAGE);
+                        dispose();
                     }
                 }
         );
@@ -92,7 +94,7 @@ public class AddBook extends JFrame {
         pack();
         setLocationRelativeTo(getOwner());
         setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 

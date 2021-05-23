@@ -1,5 +1,6 @@
 package Class;
 
+import javax.swing.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,17 +13,25 @@ public class Record {
     private String recordID;
     private String bookID;
     private String readerID;
-    private Date borrowDate;
 
-    Record(){
-
+    public Date getBorrowDate() {
+        return borrowDate;
     }
-    Record(String bookID, String readerID, Date borrowDate){
-        this.bookID = bookID;
-        this.readerID = readerID;
+
+    public void setBorrowDate(Date borrowDate) {
         this.borrowDate = borrowDate;
     }
-    Record(ResultSet rs){
+
+    private Date borrowDate;
+
+    public Record(){
+
+    }
+    Record(String bookID, String readerID){
+        this.bookID = bookID;
+        this.readerID = readerID;
+    }
+    public Record(ResultSet rs){
         try {
             this.bookID = rs.getString("bookID");
             this.readerID = rs.getString("readerID");
@@ -32,73 +41,31 @@ public class Record {
         }
     }
 
-    private void savaRecord(){
-        String str = "表名";
-        String sql = "INSERT INTO ? VALUES(?, ?, ?, ?)";
+    private void savaRecord() throws SQLException {
+        String sql1 = "INSERT INTO RECORD VALUES(?, ?, ?, ?)";
+        String sql2 = "UPDATE BOOK SET status='0' WHERE bookid=?";
         Connection connection = JDBC.LinkConnection();
         PreparedStatement pstmt = null;
-        if(connection != null){
-            try {
-                pstmt = connection.prepareStatement(sql);
-                pstmt.setString(1, str);
-                pstmt.setInt(2, (int) Math.random()*1000);
-                pstmt.setString(3, this.bookID);
-                pstmt.setString(4, this.readerID);
-                pstmt.setDate(5, (java.sql.Date) this.borrowDate);
-                pstmt.executeUpdate();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-        }else{
-            System.out.println("连接失败");
-        }
+        pstmt = connection.prepareStatement(sql1);
+        pstmt.setString(1, String.valueOf((int)(Math.random()*10000)));
+        pstmt.setString(2, this.bookID);
+        pstmt.setString(3, this.readerID);
+        pstmt.setDate(4, new java.sql.Date(new java.util.Date().getTime()));
+        pstmt.executeUpdate();
+        pstmt = connection.prepareStatement(sql2);
+        pstmt.setString(1, this.bookID);
+        pstmt.executeUpdate();
+
     }
 
-    private void deleteRecord(){
-        String str = "表名";
-        String sql = "DELETE FROM ? WHERE bookid=?";
+    private void deleteRecord() throws SQLException {
+        String sql = "DELETE FROM RECORD WHERE bookid=?";
         Connection connection = JDBC.LinkConnection();
         PreparedStatement pstmt = null;
-        if(connection != null){
-            try {
-                pstmt = connection.prepareStatement(sql);
-                pstmt.setString(1, str);
-                pstmt.setString(2, this.bookID);
-                pstmt.executeUpdate();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-        }else{
-            System.out.println("连接失败");
-        }
+        pstmt = connection.prepareStatement(sql);
+        pstmt.setString(1, this.bookID);
+        pstmt.executeUpdate();
     }
-    /*
-    private static Class.Record getRecord(String bookID){
-        Class.Record record = null;
-        String str = "表名";
-        String sql = "SELECT * FROM ? WHERE bookid=?";
-        Connection connection = Class.JDBC.LinkConnection();
-        PreparedStatement pstmt = null;
-        if(connection != null){
-            try {
-                pstmt = connection.prepareStatement(sql);
-                pstmt.setString(1, str);
-                pstmt.setString(2, bookID);
-                pstmt.execute();
-                ResultSet rs = pstmt.getResultSet();
-                rs.next();
-                record = new Class.Record(rs);
-                return record;
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-        }else{
-            System.out.println("连接失败");
-        }
-        return record;
-    }
-
-     */
 
     public static List<Record> getRecords(){
         List<Record> list = new ArrayList<>();
@@ -130,15 +97,21 @@ public class Record {
     }
 
     public static void borrowBook(Book book, Reader reader){
-        Date date = new Date();
-        Record record = new Record(book.getBookId(), reader.getReaderID(), date);
-        record.savaRecord();
+        Record record = new Record(book.getBookId(), reader.getReaderID());
+        try {
+            record.savaRecord();
+        } catch (SQLException throwables) {
+            JOptionPane.showMessageDialog(null, "网络连接超时", "错误", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public static void returnBook(Book book){
-        Record record = new Record(book.getBookId(), null, new Date());
-        if(!isExpired(record)){
+        Record record = new Record(book.getBookId(), null);
+        try {
             record.deleteRecord();
+            JOptionPane.showMessageDialog(null, "还书成功", "还书", JOptionPane.INFORMATION_MESSAGE);
+        } catch (SQLException throwables) {
+            JOptionPane.showMessageDialog(null, "网络连接超时", "错误", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
