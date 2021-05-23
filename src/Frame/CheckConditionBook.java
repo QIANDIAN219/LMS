@@ -97,7 +97,6 @@ public class CheckConditionBook extends JFrame {
         if(list.size() != 0){
             strings = new String[list.size()][7];
             for(int i = 0; i < list.size(); i++){
-                System.out.println(i);
                 book = list.get(i);
                 strings[i][0] = String.valueOf(i+1);
                 strings[i][1] = book.getBookId();

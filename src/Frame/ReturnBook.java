@@ -34,6 +34,7 @@ public class ReturnBook extends JFrame {
                     public void actionPerformed(ActionEvent e) {
                         Book book = new Book(textField1.getText());
                         Record.returnBook(book);
+                        dispose();
                     }
                 }
         );

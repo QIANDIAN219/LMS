@@ -1,5 +1,6 @@
 package Class;
 
+import javax.swing.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -13,9 +14,9 @@ public class JDBC {
             connection = DriverManager.getConnection(url, "lzh", "lzh1234");
             return connection;
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "网络连接超时", "错误", JOptionPane.ERROR_MESSAGE);
         } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            JOptionPane.showMessageDialog(null, "网络连接超时", "错误", JOptionPane.ERROR_MESSAGE);
         }
         return connection;
     }

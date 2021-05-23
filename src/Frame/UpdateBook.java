@@ -64,7 +64,7 @@ public class UpdateBook extends JFrame {
         textField4.setText(book.getPublisher());
         contentPane.add(textField5);
         textField5.setBounds(100, 170, 120, textField5.getPreferredSize().height);
-        textField5.setText(Double.toString(book.getPrice()));
+        textField5.setText(String.valueOf(book.getPrice()));
         contentPane.add(textField6);
         textField6.setBounds(100, 200, 200, textField6.getPreferredSize().height * 4);
         textField6.setText(book.getAbstracts());

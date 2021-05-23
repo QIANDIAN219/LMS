@@ -47,68 +47,50 @@ public class Reader {
     }
 
     public void savaReader(){
-        String str = "表名";
-        String sql = "INSERT INTO ? VALUES(?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO READER VALUES(?, ?, ?, ?, ?, ?)";
         Connection connection = JDBC.LinkConnection();
         PreparedStatement pstmt = null;
-        if(connection != null){
-            try {
-                pstmt = connection.prepareStatement(sql);
-                pstmt.setString(1, str);
-                pstmt.setInt(2, (int) Math.random()*1000);
-                pstmt.setString(3, this.readerID);
-                pstmt.setString(4, this.readerName);
-                pstmt.setString(5, this.address);
-                pstmt.setString(6, this.phone);
-                pstmt.setString(7, this.email);
-                pstmt.executeUpdate();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-        }else{
-            System.out.println("连接失败");
+        try {
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, (int) Math.random()*1000);
+            pstmt.setString(2, this.readerID);
+            pstmt.setString(3, this.readerName);
+            pstmt.setString(4, this.address);
+            pstmt.setString(5, this.phone);
+            pstmt.setString(6, this.email);
+            pstmt.executeUpdate();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
     }
 
     public void deleteReader(){
-        String str = "表名";
-        String sql = "DELETE FROM ? WHERE rederid=?";
+        String sql = "DELETE FROM READER WHERE rederid=?";
         Connection connection = JDBC.LinkConnection();
         PreparedStatement pstmt = null;
-        if(connection != null){
-            try {
-                pstmt = connection.prepareStatement(sql);
-                pstmt.setString(1, str);
-                pstmt.setString(2, this.readerID);
-                pstmt.executeUpdate();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-        }else{
-            System.out.println("连接失败");
+        try {
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, this.readerID);
+            pstmt.executeUpdate();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
     }
 
     public void updateReader(){
-        String str = "表名";
-        String sql = "UPDATE ? SET readername=?, address=?, phone=?, email=? WHERE readerid=?";
+        String sql = "UPDATE READER SET readername=?, address=?, phone=?, email=? WHERE readerid=?";
         Connection connection = JDBC.LinkConnection();
         PreparedStatement pstmt = null;
-        if(connection != null){
-            try {
-                pstmt = connection.prepareStatement(sql);
-                pstmt.setString(1, str);
-                pstmt.setString(2, this.readerName);
-                pstmt.setString(3, this.address);
-                pstmt.setString(4, this.phone);
-                pstmt.setString(5, this.email);
-                pstmt.setString(6, this.readerID);
-                pstmt.executeUpdate();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-        }else{
-            System.out.println("连接失败");
+        try {
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, this.readerName);
+            pstmt.setString(2, this.address);
+            pstmt.setString(3, this.phone);
+            pstmt.setString(4, this.email);
+            pstmt.setString(5, this.readerID);
+            pstmt.executeUpdate();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
     }
 
@@ -119,24 +101,18 @@ public class Reader {
 
     public static List<Reader> getReaders(){
         List<Reader> list = new ArrayList<>();
-        String str = "表名";
-        String sql = "SELECT * FROM ?";
+        String sql = "SELECT * FROM READER";
         Connection connection = JDBC.LinkConnection();
         PreparedStatement pstmt = null;
-        if(connection != null){
-            try {
-                pstmt = connection.prepareStatement(sql);
-                pstmt.setString(1, str);
-                pstmt.execute();
-                ResultSet rs = pstmt.getResultSet();
-                while (rs.next()){
-                    list.add(new Reader(rs));
-                }
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+        try {
+            pstmt = connection.prepareStatement(sql);
+            pstmt.execute();
+            ResultSet rs = pstmt.getResultSet();
+            while (rs.next()){
+                list.add(new Reader(rs));
             }
-        }else{
-            System.out.println("连接失败");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
         return list;
     }

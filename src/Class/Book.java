@@ -63,24 +63,27 @@ public class Book {
         String sql = "INSERT INTO BOOK VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Connection connection = JDBC.LinkConnection();
         PreparedStatement pstmt = null;
-        if(connection != null){
+        try {
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, String.valueOf((int)(Math.random()*10000)));
+            pstmt.setString(2, this.bookId);
+            pstmt.setString(3, this.bookName);
+            pstmt.setString(4, this.author);
+            pstmt.setString(5, this.publisher);
+            pstmt.setDouble(6, this.price);
+            pstmt.setString(7, this.abstracts);
+            pstmt.setString(8, this.catelog);
+            pstmt.setString(9, this.status);
+            pstmt.executeUpdate();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }finally {
             try {
-                pstmt = connection.prepareStatement(sql);
-                pstmt.setString(1, String.valueOf((int)(Math.random()*10000)));
-                pstmt.setString(2, this.bookId);
-                pstmt.setString(3, this.bookName);
-                pstmt.setString(4, this.author);
-                pstmt.setString(5, this.publisher);
-                pstmt.setDouble(6, this.price);
-                pstmt.setString(7, this.abstracts);
-                pstmt.setString(8, this.catelog);
-                pstmt.setString(9, this.status);
-                pstmt.executeUpdate();
+                connection.close();
+                pstmt.close();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
-        }else{
-            System.out.println("连接失败");
         }
     }
 
@@ -88,16 +91,12 @@ public class Book {
         String sql = "DELETE FROM BOOK WHERE bookid=?";
         Connection connection = JDBC.LinkConnection();
         PreparedStatement pstmt = null;
-        if(connection != null){
-            try {
-                pstmt = connection.prepareStatement(sql);
-                pstmt.setString(1, this.bookId);
-                pstmt.executeUpdate();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-        }else{
-            System.out.println("连接失败");
+        try {
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, this.bookId);
+            pstmt.executeUpdate();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
     }
 
@@ -118,43 +117,20 @@ public class Book {
         JOptionPane.showMessageDialog(null, "修改成功", "修改图书信息", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public static void updateStatus(Book book){
-        String str = "表名";
-        String sql = "UPDATE ? SET status=? WHERE bookid=?";
-        Connection connection = JDBC.LinkConnection();
-        PreparedStatement pstmt = null;
-        if(connection != null){
-            try {
-                pstmt = connection.prepareStatement(sql);
-                pstmt.setString(2, book.status);
-                pstmt.setString(3, book.bookId);
-                pstmt.executeUpdate();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-        }else{
-            System.out.println("连接失败");
-        }
-    }
-
     public static Book getBook(String bookId){
         Book book = null;
         String sql = "SELECT * FROM BOOK WHERE bookid=?";
         Connection connection = JDBC.LinkConnection();
         PreparedStatement pstmt = null;
-        if(connection != null){
-            try {
-                pstmt = connection.prepareStatement(sql);
-                pstmt.setString(1, bookId);
-                pstmt.execute();
-                ResultSet rs = pstmt.getResultSet();
-                rs.next();
-                book = new Book(rs);
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-        }else{
-            System.out.println("连接失败");
+        try {
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, bookId);
+            pstmt.execute();
+            ResultSet rs = pstmt.getResultSet();
+            rs.next();
+            book = new Book(rs);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
         return book;
     }

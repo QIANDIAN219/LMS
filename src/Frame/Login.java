@@ -1,20 +1,19 @@
 package Frame;
 
-import Class.*;
+import Class.Account;
+import Class.JDBC;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-/*
- * Created by JFormDesigner on Tue May 18 10:27:20 CST 2021
- */
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 
-
-/**
- * @author unknown
- */
-public class BorrowBook extends JFrame {
-    public BorrowBook() {
+public class Login extends JFrame{
+    public Login() {
         initComponents();
     }
 
@@ -23,9 +22,9 @@ public class BorrowBook extends JFrame {
         // Generated using JFormDesigner Evaluation license - unknown
         textField1 = new JTextField();
         textField2 = new JTextField();
-        label1 = new JLabel("图书证编号");
-        label2 = new JLabel("图书编号");
-        button1 = new JButton("借书");
+        label1 = new JLabel("管理员账号");
+        label2 = new JLabel("管理员密码");
+        button1 = new JButton("登录");
 
         //======== this ========
         Container contentPane = getContentPane();
@@ -34,7 +33,7 @@ public class BorrowBook extends JFrame {
         contentPane.add(label1);
         label1.setBounds(new Rectangle(new Point(30, 90), label1.getPreferredSize()));
         contentPane.add(label2);
-        label2.setBounds(new Rectangle(new Point(40, 130), label2.getPreferredSize()));
+        label2.setBounds(new Rectangle(new Point(30, 130), label2.getPreferredSize()));
         contentPane.add(textField1);
         textField1.setBounds(100, 90, 90, textField1.getPreferredSize().height);
         contentPane.add(textField2);
@@ -45,10 +44,26 @@ public class BorrowBook extends JFrame {
                 new AbstractAction() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        Reader reader = new Reader(textField1.getText());
-                        Book book = new Book(textField2.getText());
-                        Record.borrowBook(book, reader);
-                        dispose();
+                        String sql = "SELECT * FROM ACCOUNT WHERE USERNAME=?";
+                        Connection connection = JDBC.LinkConnection();
+                        PreparedStatement pstmt = null;
+                        try {
+                            pstmt = connection.prepareStatement(sql);
+                            pstmt.setString(1, textField1.getText());
+                            pstmt.execute();
+                            ResultSet rs = pstmt.getResultSet();
+                            rs.next();
+                            Account account = new Account(rs);
+                            if(account.getPassword().equals(textField2.getText())) {
+                                JOptionPane.showMessageDialog(null, "登录成功", "登录", JOptionPane.INFORMATION_MESSAGE);
+                                new Main();
+                                dispose();
+                            }else{
+                                JOptionPane.showMessageDialog(null, "账号或密码错误", "错误", JOptionPane.INFORMATION_MESSAGE);
+                            }
+                        } catch (SQLException throwables) {
+                            JOptionPane.showMessageDialog(null, "账号或密码错误", "错误", JOptionPane.INFORMATION_MESSAGE);
+                        }
                     }
                 }
         );

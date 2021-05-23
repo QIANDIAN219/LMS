@@ -49,7 +49,6 @@ public class ShowBook extends JFrame {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         new AddBook();
-
                     }
                 }
         );

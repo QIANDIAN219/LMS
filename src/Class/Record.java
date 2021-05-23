@@ -55,38 +55,47 @@ public class Record {
         pstmt = connection.prepareStatement(sql2);
         pstmt.setString(1, this.bookID);
         pstmt.executeUpdate();
-
+        connection.close();
+        pstmt.close();
     }
 
-    private void deleteRecord() throws SQLException {
-        String sql = "DELETE FROM RECORD WHERE bookid=?";
+    private int deleteRecord() throws SQLException {
+        String sql1 = "DELETE FROM RECORD WHERE bookid=?";
+        String sql2 = "UPDATE BOOK SET status='1' WHERE bookid=?";
         Connection connection = JDBC.LinkConnection();
         PreparedStatement pstmt = null;
-        pstmt = connection.prepareStatement(sql);
+        pstmt = connection.prepareStatement(sql1);
+        pstmt.setString(1, this.bookID);
+        int num = pstmt.executeUpdate();
+        pstmt = connection.prepareStatement(sql2);
         pstmt.setString(1, this.bookID);
         pstmt.executeUpdate();
+        connection.close();
+        pstmt.close();
+        return num;
     }
 
     public static List<Record> getRecords(){
         List<Record> list = new ArrayList<>();
-        String str = "表名";
-        String sql = "SELECT * FROM ?";
+        String sql = "SELECT * FROM RECORD";
         Connection connection = JDBC.LinkConnection();
         PreparedStatement pstmt = null;
-        if(connection != null){
+        try {
+            pstmt = connection.prepareStatement(sql);
+            pstmt.execute();
+            ResultSet rs = pstmt.getResultSet();
+            while(rs.next()){
+                list.add(new Record(rs));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }finally {
             try {
-                pstmt = connection.prepareStatement(sql);
-                pstmt.setString(1, str);
-                pstmt.execute();
-                ResultSet rs = pstmt.getResultSet();
-                while(rs.next()){
-                    list.add(new Record(rs));
-                }
+                connection.close();
+                pstmt.close();
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
-        }else{
-            System.out.println("连接失败");
         }
         return list;
     }
@@ -97,21 +106,48 @@ public class Record {
     }
 
     public static void borrowBook(Book book, Reader reader){
-        Record record = new Record(book.getBookId(), reader.getReaderID());
+        String sql = "SELECT * FROM BOOK WHERE bookid=?";
+        Connection connection = JDBC.LinkConnection();
+        PreparedStatement pstmt = null;
         try {
-            record.savaRecord();
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, book.getBookId());
+            pstmt.execute();
+            ResultSet rs = pstmt.getResultSet();
+            rs.next();
+            Book book1 = new Book(rs);
+            if(book1.getStatus().equals("1")){
+                Record record = new Record(book.getBookId(), reader.getReaderID());
+                record.savaRecord();
+                JOptionPane.showMessageDialog(null, "借书成功", "借书", JOptionPane.INFORMATION_MESSAGE);
+            }else{
+                JOptionPane.showMessageDialog(null, "该图书不存在或不在库中", "错误", JOptionPane.ERROR_MESSAGE);
+            }
         } catch (SQLException throwables) {
-            JOptionPane.showMessageDialog(null, "网络连接超时", "错误", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "该图书不存在或不在库中", "错误", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     public static void returnBook(Book book){
-        Record record = new Record(book.getBookId(), null);
+        String sql = "SELECT * FROM RECORD WHERE bookid=?";
+        Connection connection = JDBC.LinkConnection();
+        PreparedStatement pstmt = null;
         try {
-            record.deleteRecord();
-            JOptionPane.showMessageDialog(null, "还书成功", "还书", JOptionPane.INFORMATION_MESSAGE);
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, book.getBookId());
+            pstmt.execute();
+            ResultSet rs = pstmt.getResultSet();
+            rs.next();
+            if(rs != null){
+                Record record = new Record(book.getBookId(), null);
+                if(record.deleteRecord() > 0){
+                    JOptionPane.showMessageDialog(null, "还书成功", "还书", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "图书编号错误或没有借阅该图书", "错误", JOptionPane.INFORMATION_MESSAGE);
+            }
         } catch (SQLException throwables) {
-            JOptionPane.showMessageDialog(null, "网络连接超时", "错误", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "图书编号错误或没有借阅该图书", "错误", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 }

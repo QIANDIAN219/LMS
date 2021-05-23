@@ -14,7 +14,7 @@ public class Main extends JFrame{
         // Generated using JFormDesigner Evaluation license - unknown
         button1 = new JButton("借书");
         button2 = new JButton("还书");
-        button3 = new JButton("查书");
+        button3 = new JButton("找书");
         button4 = new JButton("新增");
 
         //======== this ========

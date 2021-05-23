@@ -15,76 +15,54 @@ public class Account {
     Account(){
 
     }
-    Account(ResultSet rs){
+    public Account(ResultSet rs) throws SQLException {
+        this.username = rs.getString("username");
+        this.password = rs.getString("password");
+        this.type = rs.getString("type");
+    }
+
+
+    public void savaAccount(){
+        String sql = "INSERT INTO Account VALUES(?, ?, ?, ?)";
+        Connection connection = JDBC.LinkConnection();
+        PreparedStatement pstmt = null;
         try {
-            this.username = rs.getString("username");
-            this.password = rs.getString("password");
-            this.type = rs.getString("type");
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, (int) Math.random()*1000);
+            pstmt.setString(2, this.username);
+            pstmt.setString(3, this.password);
+            pstmt.setString(4, this.type);
+            pstmt.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
     }
 
-
-    public void savaAccount(){
-        String str = "表名";
-        String sql = "INSERT INTO ? VALUES(?, ?, ?, ?)";
-        Connection connection = JDBC.LinkConnection();
-        PreparedStatement pstmt = null;
-        if(connection != null){
-            try {
-                pstmt = connection.prepareStatement(sql);
-                pstmt.setString(1, str);
-                pstmt.setInt(2, (int) Math.random()*1000);
-                pstmt.setString(3, this.username);
-                pstmt.setString(4, this.password);
-                pstmt.setString(5, this.type);
-                pstmt.executeUpdate();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-        }else{
-            System.out.println("连接失败");
-        }
-    }
-
     public void deleteAccount(){
-        String str = "表名";
-        String sql = "DELETE FROM ? WHERE username=?";
+        String sql = "DELETE FROM Account WHERE username=?";
         Connection connection = JDBC.LinkConnection();
         PreparedStatement pstmt = null;
-        if(connection != null){
-            try {
-                pstmt = connection.prepareStatement(sql);
-                pstmt.setString(1, str);
-                pstmt.setString(2, this.username);
-                pstmt.executeUpdate();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-        }else{
-            System.out.println("连接失败");
+        try {
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, this.username);
+            pstmt.executeUpdate();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
     }
 
     public void updateAccount(){
-        String str = "表名";
-        String sql = "UPDATE ? SET password=?, type=? WHERE username=?";
+        String sql = "UPDATE Account SET password=?, type=? WHERE username=?";
         Connection connection = JDBC.LinkConnection();
         PreparedStatement pstmt = null;
-        if(connection != null){
-            try {
-                pstmt = connection.prepareStatement(sql);
-                pstmt.setString(1, str);
-                pstmt.setString(2, this.password);
-                pstmt.setString(3, this.type);
-                pstmt.setString(4, this.username);
-                pstmt.executeUpdate();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-        }else{
-            System.out.println("连接失败");
+        try {
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, this.password);
+            pstmt.setString(2, this.type);
+            pstmt.setString(3, this.username);
+            pstmt.executeUpdate();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
     }
 
@@ -95,24 +73,18 @@ public class Account {
 
     public static List<Account> getAccounts(){
         List<Account> list = new ArrayList<>();
-        String str = "表名";
-        String sql = "SELECT * FROM ?";
+        String sql = "SELECT * FROM Account";
         Connection connection = JDBC.LinkConnection();
         PreparedStatement pstmt = null;
-        if(connection != null){
-            try {
-                pstmt = connection.prepareStatement(sql);
-                pstmt.setString(1, str);
-                pstmt.execute();
-                ResultSet rs = pstmt.getResultSet();
-                while(rs.next()){
-                    list.add(new Account(rs));
-                }
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+        try {
+            pstmt = connection.prepareStatement(sql);
+            pstmt.execute();
+            ResultSet rs = pstmt.getResultSet();
+            while(rs.next()){
+                list.add(new Account(rs));
             }
-        }else{
-            System.out.println("连接失败");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
         return list;
     }
